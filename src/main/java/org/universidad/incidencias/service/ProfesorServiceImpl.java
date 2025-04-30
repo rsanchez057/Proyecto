@@ -35,7 +35,7 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor update(Profesor profesor) {
-        Profesor profesorDB = profesorRepository.findProfesorBy(profesor.getCif());
+        Profesor profesorDB = profesorRepository.findProfesorByCif(profesor.getCif());
         profesorDB.setNombre(profesor.getNombre());
         profesorDB.setEmail(profesor.getEmail());
         return profesorRepository.save(profesorDB);

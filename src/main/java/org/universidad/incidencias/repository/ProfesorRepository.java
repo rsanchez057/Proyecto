@@ -11,6 +11,6 @@ import java.util.List;
 public interface ProfesorRepository extends JpaRepository<Profesor, Integer> {
 
     // AlumnoRepository.java
-    Profesor findProfesorBy(String cif);
+    Profesor findProfesorByCif(String cif);
 
 }
