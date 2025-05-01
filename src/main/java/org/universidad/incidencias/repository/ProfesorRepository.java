@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProfesorRepository extends JpaRepository<Profesor, Integer> {
+public interface ProfesorRepository extends JpaRepository<Profesor, String> {
 
     // AlumnoRepository.java
     Optional<Profesor> findProfesorByCif(String cif);
