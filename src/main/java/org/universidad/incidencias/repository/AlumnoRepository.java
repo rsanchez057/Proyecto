@@ -5,12 +5,11 @@ import org.springframework.stereotype.Repository;
 import org.universidad.incidencias.model.Alumno;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface AlumnoRepository extends JpaRepository<Alumno, Integer> {
+public interface AlumnoRepository extends JpaRepository<Alumno, String> {
     // AlumnoRepository.java
-    Alumno findAlumnoByCif(String cif);
-
-
+    Optional<Alumno> findAlumnoByCif(String cif);
 
 }
