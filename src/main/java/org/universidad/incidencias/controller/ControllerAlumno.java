@@ -12,6 +12,7 @@ import org.universidad.incidencias.service.AlumnoService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/alumno")
 public class ControllerAlumno {

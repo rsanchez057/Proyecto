@@ -10,6 +10,7 @@ import org.universidad.incidencias.service.ProfesorService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/profesor")
 public class ControllerProfesor {
