@@ -9,6 +9,7 @@ import org.universidad.incidencias.service.IncidenciaService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/incidencia")
 public class ControllerIncidencia {
