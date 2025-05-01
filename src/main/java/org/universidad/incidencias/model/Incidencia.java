@@ -20,11 +20,11 @@ public class Incidencia {
 
 
     @ManyToOne
-    @JoinColumn(name = "alumno_id")
+    @JoinColumn(name = "alumno_cif")
     private Alumno alumno;
 
     @ManyToOne
-    @JoinColumn(name = "profesor_id")
+    @JoinColumn(name = "profesor_cif")
     private Profesor profesor;
 
     public Integer getId() {
@@ -78,6 +78,8 @@ public class Incidencia {
     public Alumno getAlumno() {
         return alumno;
     }
+
+     
 
     public void setAlumno(Alumno alumno) {
         this.alumno = alumno;

@@ -1,10 +1,13 @@
 package org.universidad.incidencias.service;
 
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.universidad.incidencias.model.Alumno;
+import org.universidad.incidencias.model.Profesor;
 import org.universidad.incidencias.model.Incidencia;
+import org.universidad.incidencias.repository.AlumnoRepository;
+import org.universidad.incidencias.repository.ProfesorRepository;
 import org.universidad.incidencias.repository.IncidenciaRepository;
 
 import java.util.List;
@@ -16,7 +19,10 @@ public class IncidenciaServiceImpl implements IncidenciaService {
     private IncidenciaRepository incidenciaRepository;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private AlumnoRepository alumnoRepository;
+
+    @Autowired
+    private ProfesorRepository profesorRepository;
 
     @Override
     public List<Incidencia> getAll() {
@@ -30,19 +36,32 @@ public class IncidenciaServiceImpl implements IncidenciaService {
 
     @Override
     public Incidencia save(Incidencia incidencia) {
+        // Validar alumno
+        String alumnoCif = incidencia.getAlumno().getCif();
+        Alumno alumno = alumnoRepository.findAlumnoByCif(alumnoCif)
+                .orElseThrow(() -> new RuntimeException("Alumno con CIF " + alumnoCif + " no existe"));
+
+        // Validar profesor
+        String profesorCif = incidencia.getProfesor().getCif();
+        Profesor profesor = profesorRepository.findProfesorByCif(profesorCif)
+                .orElseThrow(() -> new RuntimeException("Profesor con CIF " + profesorCif + " no existe"));
+
+        // Asociar entidades válidas
+        incidencia.setAlumno(alumno);
+        incidencia.setProfesor(profesor);
+
+        return incidenciaRepository.save(incidencia);
+    }
+
+
+    @Override
+    public Incidencia update(Incidencia incidencia) {
         return incidenciaRepository.save(incidencia);
     }
 
     @Override
-    public Incidencia update(Incidencia incidencia) {
-        Incidencia incidenciaDB = incidenciaRepository.findIncidenciaByTitulo(incidencia.getTitulo());
-        incidenciaDB.setDescripcion(incidencia.getDescripcion());
-        incidenciaDB.setFecha(incidencia.getFecha());
-        return incidenciaRepository.save(incidenciaDB);
-    }
-
-    @Override
     public void delete(Integer id) {
-        incidenciaRepository.delete(getOne(id));
+        incidenciaRepository.deleteById(id);
     }
 }
+

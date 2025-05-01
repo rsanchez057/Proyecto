@@ -25,7 +25,7 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor getOne(String cif) {
-        return profesorRepository.findProfesorByCif(cif);
+        return profesorRepository.findProfesorByCif(cif).orElseThrow(() -> new RuntimeException("Profesor no encontrado"));
     }
 
     @Override
@@ -35,7 +35,8 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor update(Profesor profesor) {
-        Profesor profesorDB = profesorRepository.findProfesorByCif(profesor.getCif());
+        Profesor profesorDB = profesorRepository.findProfesorByCif(profesor.getCif())
+                .orElseThrow(() -> new RuntimeException("Profesor no encontrado"));
         profesorDB.setNombre(profesor.getNombre());
         profesorDB.setEmail(profesor.getEmail());
         return profesorRepository.save(profesorDB);

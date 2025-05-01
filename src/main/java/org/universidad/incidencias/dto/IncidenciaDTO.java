@@ -7,6 +7,8 @@ public class IncidenciaDTO {
     private String fecha;
     private String estado;
     private String tipo;
+    private String cifAlumno;
+    private String cifProfesor;
 
     public String getTitulo() {
         return titulo;
@@ -46,5 +48,21 @@ public class IncidenciaDTO {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getCifAlumno() {
+        return cifAlumno;
+    }
+
+    public void setCifAlumno(String cifAlumno) {
+        this.cifAlumno = cifAlumno;
+    }
+
+    public String getCifProfesor() {
+        return cifProfesor;
+    }
+
+    public void setCifProfesor(String cifProfesor) {
+        this.cifProfesor = cifProfesor;
     }
 }

@@ -6,11 +6,12 @@ import org.universidad.incidencias.model.Alumno;
 import org.universidad.incidencias.model.Profesor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProfesorRepository extends JpaRepository<Profesor, Integer> {
 
     // AlumnoRepository.java
-    Profesor findProfesorByCif(String cif);
+    Optional<Profesor> findProfesorByCif(String cif);
 
 }
