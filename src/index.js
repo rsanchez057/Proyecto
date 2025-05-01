@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { StudentProvider } from './StudentContext'; // Importa el proveedor del contexto
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <StudentProvider> {/* Envuelve la aplicación con el proveedor */}
+      <App />
+    </StudentProvider>
   </React.StrictMode>
 );
 
