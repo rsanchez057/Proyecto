@@ -25,7 +25,7 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     @Override
     public Alumno getOne(String cif) {
-        return alumnoRepository.findAlumnoByCif(cif);
+        return alumnoRepository.findAlumnoByCif(cif).orElseThrow(() -> new RuntimeException("Alumno no encontrado"));
     }
 
     @Override
@@ -35,11 +35,13 @@ public class AlumnoServiceImpl implements AlumnoService {
 
     @Override
     public Alumno update(Alumno alumno) {
-        Alumno alumnoDB = alumnoRepository.findAlumnoByCif(alumno.getCif());
+        Alumno alumnoDB = alumnoRepository.findAlumnoByCif(alumno.getCif())
+                .orElseThrow(() -> new RuntimeException("Alumno no encontrado"));
         alumnoDB.setNombre(alumno.getNombre());
         alumnoDB.setEmail(alumno.getEmail());
         return alumnoRepository.save(alumnoDB);
     }
+
 
     @Override
     public void delete(String cif) {
