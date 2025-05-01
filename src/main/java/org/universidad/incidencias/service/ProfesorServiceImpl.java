@@ -24,8 +24,8 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public Profesor getOne(Integer id) {
-        return profesorRepository.findById(id).orElse(null);
+    public Profesor getOne(String cif) {
+        return profesorRepository.findProfesorByCif(cif);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ProfesorServiceImpl implements ProfesorService {
     }
 
     @Override
-    public void delete(Integer id) {
-        profesorRepository.delete(getOne(id));
+    public void delete(String cif) {
+        profesorRepository.delete(getOne(cif));
     }
 }

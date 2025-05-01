@@ -24,8 +24,8 @@ public class CoordinadorServiceImpl implements CoordinadorService {
     }
 
     @Override
-    public Coordinador getOne(Integer id) {
-        return coordinadorRepository.findById(id).orElse(null);
+    public Coordinador getOne(String cif) {
+        return coordinadorRepository.findCoordinadorByCif(cif);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class CoordinadorServiceImpl implements CoordinadorService {
     }
 
     @Override
-    public void delete(Integer id) {
-        coordinadorRepository.delete(getOne(id));
+    public void delete(String cif) {
+        coordinadorRepository.delete(getOne(cif));
     }
 }

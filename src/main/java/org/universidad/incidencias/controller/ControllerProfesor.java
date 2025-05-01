@@ -27,6 +27,11 @@ public class ControllerProfesor {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/get/{cif}")
+    public ProfesorDTO getOne(@PathVariable String cif) {
+        return modelMapper.map(profesorService.getOne(cif), ProfesorDTO.class);
+    }
+
     @PostMapping("/save")
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         Profesor profesor = modelMapper.map(profesorDTO, Profesor.class);
@@ -38,8 +43,8 @@ public class ControllerProfesor {
         profesorService.update(modelMapper.map(profesorDTO, Profesor.class));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Integer id) {
-        profesorService.delete(id);
+    @DeleteMapping("/delete/{cif}")
+    public void delete(@PathVariable String cif) {
+        profesorService.delete(cif);
     }
 }

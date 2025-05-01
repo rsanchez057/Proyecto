@@ -9,13 +9,13 @@ import java.util.List;
 public interface AlumnoService {
     List<Alumno> getAll();
 
-    Alumno getOne(Integer id);
+    Alumno getOne(String cif);
 
     Alumno save(Alumno alumno);
 
     Alumno update(Alumno alumno);
 
-    void delete(Integer id);
+    void delete(String cif);
 
 
 }

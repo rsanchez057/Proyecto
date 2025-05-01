@@ -27,6 +27,10 @@ public class ControllerCoordinador {
                 .map(coordinador -> modelMapper.map(coordinador, CoordinadorDTO.class))
                 .collect(Collectors.toList());
     }
+    @GetMapping("/get/{cif}")
+    public CoordinadorDTO getOne(@PathVariable String cif) {
+        return modelMapper.map(coordinadorService.getOne(cif), CoordinadorDTO.class);
+    }
 
     @PostMapping("/save")
     public void save(@RequestBody CoordinadorDTO coordinadorDTO) {
@@ -39,8 +43,8 @@ public class ControllerCoordinador {
         coordinadorService.update(modelMapper.map(coordinadorDTO, Coordinador.class));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Integer id) {
-        coordinadorService.delete(id);
+    @DeleteMapping("/delete/{cif}")
+    public void delete(@PathVariable String cif) {
+        coordinadorService.delete(cif);
     }
 }

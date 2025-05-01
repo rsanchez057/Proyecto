@@ -24,8 +24,8 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public Alumno getOne(Integer id) {
-        return alumnoRepository.findById(id).orElse(null);
+    public Alumno getOne(String cif) {
+        return alumnoRepository.findAlumnoByCif(cif);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AlumnoServiceImpl implements AlumnoService {
     }
 
     @Override
-    public void delete(Integer id) {
-        alumnoRepository.delete(getOne(id));
+    public void delete(String cif) {
+        alumnoRepository.delete(getOne(cif));
     }
 }

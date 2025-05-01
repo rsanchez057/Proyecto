@@ -27,6 +27,10 @@ public class ControllerAlumno {
                 .map(alumno -> modelMapper.map(alumno, AlumnoDTO.class))
                 .collect(Collectors.toList());
     }
+    @GetMapping("/get/{cif}")
+    public AlumnoDTO getOne(@PathVariable String cif) {
+        return modelMapper.map(alumnoService.getOne(cif), AlumnoDTO.class);
+    }
 
     @PostMapping("/save")
     public void save(@RequestBody AlumnoDTO alumnoDTO) {
@@ -39,9 +43,9 @@ public class ControllerAlumno {
         alumnoService.update(modelMapper.map(alumnoDTO, Alumno.class));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Integer id) {
-        alumnoService.delete(id);
+    @DeleteMapping("/delete/{cif}")
+    public void delete(@PathVariable String cif) {
+        alumnoService.delete(cif);
     }
 }
 

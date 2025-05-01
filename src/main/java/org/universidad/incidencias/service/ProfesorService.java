@@ -9,12 +9,12 @@ import java.util.List;
 public interface ProfesorService {
     List<Profesor> getAll();
 
-    Profesor getOne(Integer id);
+    Profesor getOne(String cif);
 
     Profesor save(Profesor profesor);
 
     Profesor update(Profesor profesor);
 
-    void delete(Integer id);
+    void delete(String cif);
 
 }

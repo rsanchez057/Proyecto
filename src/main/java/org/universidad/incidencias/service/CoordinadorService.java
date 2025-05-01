@@ -12,9 +12,9 @@ import java.util.List;
 public interface CoordinadorService {
 
     List<Coordinador> getAll();
-    Coordinador getOne(Integer id);
+    Coordinador getOne(String cif);
     Coordinador save(Coordinador coordinador);
     Coordinador update(Coordinador coordinador);
-    void delete(Integer id);
+    void delete(String cif);
 
 }
