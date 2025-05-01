@@ -5,6 +5,7 @@ public class ProfesorDTO {
     private String apellidos;
     private String cif;
     private String email;
+    private String nombreFacultad;
 
     public String getNombre() {
         return nombre;
@@ -36,5 +37,13 @@ public class ProfesorDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNombreFacultad() {
+        return nombreFacultad;
+    }
+
+    public void setNombreFacultad(String nombreFacultad) {
+        this.nombreFacultad = nombreFacultad;
     }
 }

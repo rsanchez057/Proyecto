@@ -40,7 +40,8 @@ public class FacultadServiceImpl implements FacultadService {
 
     @Override
     public Facultad update(Facultad facultad) {
-        Facultad facultadDB = facultadRepository.findFacultadBy(facultad.getNombre());
+        String nombreFacultad = facultad.getNombre();
+        Facultad facultadDB = facultadRepository.findFacultadByNombre(facultad.getNombre());
         facultadDB.setDescripcion(facultad.getDescripcion());
         facultadDB.setNombre(facultad.getNombre());
         return facultadRepository.save(facultadDB);

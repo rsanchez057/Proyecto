@@ -11,5 +11,7 @@ public interface FacultadRepository extends JpaRepository<Facultad, Integer> {
     // Por ejemplo, para buscar facultades por nombre o cualquier otro criterio
 
     @Query("select e from Facultad e where e.nombre = :nombre")
-    Facultad findFacultadBy(String nombre);
+    Facultad findFacultadByNombre(String nombre);
+
+
 }

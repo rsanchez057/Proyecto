@@ -20,28 +20,61 @@ public class ControllerProfesor {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private org.universidad.incidencias.repository.FacultadRepository facultadRepository;
+
+
     @GetMapping("/all")
     public List<ProfesorDTO> getAll() {
         return profesorService.getAll().stream()
-                .map(profesor -> modelMapper.map(profesor, ProfesorDTO.class))
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/get/{cif}")
     public ProfesorDTO getOne(@PathVariable String cif) {
-        return modelMapper.map(profesorService.getOne(cif), ProfesorDTO.class);
+        return convertToDTO(profesorService.getOne(cif));
     }
 
     @PostMapping("/save")
     public void save(@RequestBody ProfesorDTO profesorDTO) {
         Profesor profesor = modelMapper.map(profesorDTO, Profesor.class);
-        modelMapper.map(profesorService.save(profesor), ProfesorDTO.class);
+
+        if (profesorDTO.getNombreFacultad() != null) {
+            var facultad = facultadRepository.findFacultadByNombre(profesorDTO.getNombreFacultad());
+            if (facultad == null) {
+                throw new RuntimeException("Facultad con nombre '" + profesorDTO.getNombreFacultad() + "' no existe");
+            }
+            profesor.setFacultad(facultad);
+        }
+
+        profesorService.save(profesor);
     }
+
+    private ProfesorDTO convertToDTO(Profesor profesor) {
+        ProfesorDTO dto = modelMapper.map(profesor, ProfesorDTO.class);
+        if (profesor.getFacultad() != null) {
+            dto.setNombreFacultad(profesor.getFacultad().getNombre());
+        }
+        return dto;
+    }
+
 
     @PutMapping("/update")
     public void update(@RequestBody ProfesorDTO profesorDTO) {
-        profesorService.update(modelMapper.map(profesorDTO, Profesor.class));
+        Profesor profesor = modelMapper.map(profesorDTO, Profesor.class);
+
+        if (profesorDTO.getNombreFacultad() != null) {
+            var facultad = facultadRepository.findFacultadByNombre(profesorDTO.getNombreFacultad());
+            if (facultad == null) {
+                throw new RuntimeException("Facultad con nombre '" + profesorDTO.getNombreFacultad() + "' no existe");
+            }
+            profesor.setFacultad(facultad);
+        }
+
+        profesorService.update(profesor);
     }
+
 
     @DeleteMapping("/delete/{cif}")
     public void delete(@PathVariable String cif) {
