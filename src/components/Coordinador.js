@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, TextField, Button, Grid } from '@mui/material';
+import { Container, Paper, TextField, Button, Grid, Box } from '@mui/material';
 
 const Coordinador = () => {
-    const paperStyle = { padding: '50px 20px', width: 600, margin: '20px auto' };
     const [cif, setCif] = useState('');
     const [nombres, setNombres] = useState('');
     const [apellido, setApellido] = useState('');
@@ -12,16 +11,12 @@ const Coordinador = () => {
     const [currentCoordinador, setCurrentCoordinador] = useState(null);
     const [editMode, setEditMode] = useState(false);
 
-    // Cargar todos los coordinadores desde el backend
     useEffect(() => {
         fetch('http://localhost:8181/api/coordinador/all')
             .then((res) => res.json())
-            .then((result) => {
-                setCoordinadores(result);
-            });
+            .then((result) => setCoordinadores(result));
     }, []);
 
-    // Manejar el submit de un nuevo coordinador
     const handleSubmit = (e) => {
         e.preventDefault();
         const coordinador = { cif, nombres, apellido, email, facultad };
@@ -30,12 +25,11 @@ const Coordinador = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(coordinador),
         }).then(() => {
-            setCoordinadores([...coordinadores, coordinador]); // Actualiza la lista de coordinadores
-            setCif(''); setNombres(''); setApellido(''); setEmail(''); setFacultad('');
+            setCoordinadores([...coordinadores, coordinador]);
+            resetForm();
         });
     };
 
-    // Manejar la edición de un coordinador
     const handleEdit = (coordinador) => {
         setCurrentCoordinador(coordinador);
         setCif(coordinador.cif);
@@ -46,7 +40,6 @@ const Coordinador = () => {
         setEditMode(true);
     };
 
-    // Manejar la actualización de un coordinador
     const handleUpdate = (e) => {
         e.preventDefault();
         const updatedCoordinador = { cif, nombres, apellido, email, facultad };
@@ -58,11 +51,10 @@ const Coordinador = () => {
             setCoordinadores(coordinadores.map((c) => (c.cif === currentCoordinador.cif ? { ...c, ...updatedCoordinador } : c)));
             setEditMode(false);
             setCurrentCoordinador(null);
-            setCif(''); setNombres(''); setApellido(''); setEmail(''); setFacultad('');
+            resetForm();
         });
     };
 
-    // Manejar la eliminación de un coordinador
     const handleDelete = (cif) => {
         fetch(`http://localhost:8181/api/coordinador/delete/${cif}`, {
             method: 'DELETE',
@@ -71,82 +63,55 @@ const Coordinador = () => {
         });
     };
 
+    const resetForm = () => {
+        setCif('');
+        setNombres('');
+        setApellido('');
+        setEmail('');
+        setFacultad('');
+    };
+
     return (
         <Container>
-            <Paper elevation={3} style={paperStyle}>
-                <h1 style={{ color: 'blue' }}>
-                    <u>{editMode ? 'Editar Coordinador' : 'Agregar Coordinador'}</u>
-                </h1>
-                <form noValidate autoComplete="off" onSubmit={editMode ? handleUpdate : handleSubmit}>
-                    <TextField
-                        label="CIF"
-                        variant="outlined"
-                        fullWidth
-                        value={cif}
-                        onChange={(e) => setCif(e.target.value)}
-                        sx={{ marginBottom: '16px' }}
-                    />
-                    <TextField
-                        label="Nombres"
-                        variant="outlined"
-                        fullWidth
-                        value={nombres}
-                        onChange={(e) => setNombres(e.target.value)}
-                        sx={{ marginBottom: '16px' }}
-                    />
-                    <TextField
-                        label="Apellido"
-                        variant="outlined"
-                        fullWidth
-                        value={apellido}
-                        onChange={(e) => setApellido(e.target.value)}
-                        sx={{ marginBottom: '16px' }}
-                    />
-                    <TextField
-                        label="Email"
-                        variant="outlined"
-                        fullWidth
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        sx={{ marginBottom: '16px' }}
-                    />
-                    <TextField
-                        label="Facultad"
-                        variant="outlined"
-                        fullWidth
-                        value={facultad}
-                        onChange={(e) => setFacultad(e.target.value)}
-                        sx={{ marginBottom: '16px' }}
-                    />
-                    <Button variant="contained" color="primary" type="submit">
-                        {editMode ? 'Actualizar' : 'Agregar'}
-                    </Button>
-                </form>
-            </Paper>
+            <Grid container spacing={2}>
+                {/* Formulario a la izquierda */}
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ padding: '30px' }}>
+                        <h2 style={{ color: 'blue' }}>
+                            <u>{editMode ? 'Editar Coordinador' : 'Agregar Coordinador'}</u>
+                        </h2>
+                        <form onSubmit={editMode ? handleUpdate : handleSubmit}>
+                            <TextField label="CIF" variant="outlined" fullWidth value={cif} onChange={(e) => setCif(e.target.value)} sx={{ mb: 2 }} />
+                            <TextField label="Nombres" variant="outlined" fullWidth value={nombres} onChange={(e) => setNombres(e.target.value)} sx={{ mb: 2 }} />
+                            <TextField label="Apellido" variant="outlined" fullWidth value={apellido} onChange={(e) => setApellido(e.target.value)} sx={{ mb: 2 }} />
+                            <TextField label="Email" variant="outlined" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} sx={{ mb: 2 }} />
+                            <TextField label="Facultad" variant="outlined" fullWidth value={facultad} onChange={(e) => setFacultad(e.target.value)} sx={{ mb: 2 }} />
+                            <Button variant="contained" color="primary" type="submit" fullWidth>
+                                {editMode ? 'Actualizar' : 'Agregar'}
+                            </Button>
+                        </form>
+                    </Paper>
+                </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: '20px' }}>
-                {coordinadores.map((coordinador) => (
-                    <Grid item xs={12} sm={6} md={4} key={coordinador.cif}>
-                        <Paper elevation={3} style={{ padding: '10px', margin: '10px' }}>
-                            <h3>{coordinador.nombres} {coordinador.apellido}</h3>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => handleEdit(coordinador)}
-                                style={{ marginRight: '10px' }}
-                            >
-                                Editar
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                onClick={() => handleDelete(coordinador.cif)}
-                            >
-                                Eliminar
-                            </Button>
-                        </Paper>
-                    </Grid>
-                ))}
+                {/* Lista a la derecha con scroll */}
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ maxHeight: '600px', overflowY: 'auto', padding: 2 }}>
+                        <h2 style={{ color: 'green' }}><u>Lista de Coordinadores</u></h2>
+                        {coordinadores.map((coordinador) => (
+                            <Box key={coordinador.cif} sx={{ mb: 2, p: 2, border: '1px solid #ccc', borderRadius: '8px' }}>
+                                <h4>{coordinador.nombres} {coordinador.apellido}</h4>
+                                <p><strong>Email:</strong> {coordinador.email}</p>
+                                <p><strong>Facultad:</strong> {coordinador.facultad}</p>
+                                <Button variant="contained" color="secondary" size="small" sx={{ mr: 1 }} onClick={() => handleEdit(coordinador)}>
+                                    Editar
+                                </Button>
+                                <Button variant="contained" color="error" size="small" onClick={() => handleDelete(coordinador.cif)}>
+                                    Eliminar
+                                </Button>
+                            </Box>
+                        ))}
+                    </Paper>
+                </Grid>
             </Grid>
         </Container>
     );
