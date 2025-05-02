@@ -1,14 +1,22 @@
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
+import Switch from '@mui/material/Switch';
 
-export default function Appbar() {
-    return (
-        <div>
-            <h2>Appbar is rendering</h2>
-        </div>
-    );
+export default function Appbar({ modoOscuro, setModoOscuro }) {
+const handleToggle = () => {
+    setModoOscuro(!modoOscuro);
+};
+
+return (
+    <AppBar position="static">
+    <Toolbar sx={{ justifyContent: 'flex-end' }}>
+        <Switch
+         checked={modoOscuro}
+          onChange={handleToggle}
+          inputProps={{ 'aria-label': 'toggle dark mode' }}
+        />
+    </Toolbar>
+    </AppBar>
+);
 }

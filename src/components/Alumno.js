@@ -70,9 +70,17 @@ const Alumno = () => {
     const handleDelete = (cif) => {
         fetch(`http://localhost:8181/api/alumno/delete/${cif}`, {
             method: 'DELETE',
-        }).then(() => {
-            setAlumnos(alumnos.filter(a => a.cif !== cif));
-        });
+        })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Error al eliminar el alumno');
+                }
+                // Actualizar el estado local eliminando el alumno de la lista
+                setAlumnos((prevAlumnos) => prevAlumnos.filter((alumno) => alumno.cif !== cif));
+            })
+            .catch((error) => {
+                console.error('Error al eliminar el alumno:', error);
+            });
     };
 
     return (
