@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, TextField, Button, Grid } from '@mui/material';
+import {
+    Container, Paper, TextField, Button,
+    Grid, MenuItem, Typography
+} from '@mui/material';
 
 const Alumno = () => {
-    const paperStyle = { padding: '50px 20px', width: 600, margin: '20px auto' };
     const [alumnos, setAlumnos] = useState([]);
+    const [facultades, setFacultades] = useState([]);
     const [form, setForm] = useState({
         cif: '',
         nombres: '',
@@ -16,8 +19,12 @@ const Alumno = () => {
 
     useEffect(() => {
         fetch('http://localhost:8181/api/alumno/all')
-            .then((res) => res.json())
-            .then((result) => setAlumnos(result));
+            .then(res => res.json())
+            .then(setAlumnos);
+
+        fetch('http://localhost:8181/api/facultad/all')
+            .then(res => res.json())
+            .then(setFacultades);
     }, []);
 
     const handleChange = (e) => {
@@ -33,8 +40,8 @@ const Alumno = () => {
         }).then(() => {
             setForm({ cif: '', nombres: '', apellido: '', email: '', facultad: '' });
             fetch('http://localhost:8181/api/alumno/all')
-                .then((res) => res.json())
-                .then((result) => setAlumnos(result));
+                .then(res => res.json())
+                .then(setAlumnos);
         });
     };
 
@@ -55,8 +62,8 @@ const Alumno = () => {
             setEditMode(false);
             setCurrentCif(null);
             fetch('http://localhost:8181/api/alumno/all')
-                .then((res) => res.json())
-                .then((result) => setAlumnos(result));
+                .then(res => res.json())
+                .then(setAlumnos);
         });
     };
 
@@ -64,98 +71,127 @@ const Alumno = () => {
         fetch(`http://localhost:8181/api/alumno/delete/${cif}`, {
             method: 'DELETE',
         }).then(() => {
-            setAlumnos(alumnos.filter((s) => s.cif !== cif));
+            setAlumnos(alumnos.filter(a => a.cif !== cif));
         });
     };
 
     return (
         <Container>
-            <Paper elevation={3} style={paperStyle}>
-                <h1 style={{ color: 'blue' }}>
-                    <u>{editMode ? 'Editar Alumno' : 'Agregar Alumno'}</u>
-                </h1>
-                <form noValidate autoComplete="off" onSubmit={editMode ? handleUpdate : handleSubmit}>
-                    <TextField
-                        name="cif"
-                        label="CIF"
-                        variant="outlined"
-                        fullWidth
-                        value={form.cif}
-                        onChange={handleChange}
-                        sx={{ mb: 2 }}
-                        required
-                        disabled={editMode}
-                    />
-                    <TextField
-                        name="nombres"
-                        label="Nombres"
-                        variant="outlined"
-                        fullWidth
-                        value={form.nombres}
-                        onChange={handleChange}
-                        sx={{ mb: 2 }}
-                        required
-                    />
-                    <TextField
-                        name="apellido"
-                        label="Apellido"
-                        variant="outlined"
-                        fullWidth
-                        value={form.apellido}
-                        onChange={handleChange}
-                        sx={{ mb: 2 }}
-                        required
-                    />
-                    <TextField
-                        name="email"
-                        label="Email"
-                        variant="outlined"
-                        fullWidth
-                        value={form.email}
-                        onChange={handleChange}
-                        sx={{ mb: 2 }}
-                    />
-                    <TextField
-                        name="facultad"
-                        label="Facultad"
-                        variant="outlined"
-                        fullWidth
-                        value={form.facultad}
-                        onChange={handleChange}
-                        sx={{ mb: 2 }}
-                    />
-                    <Button variant="contained" color="primary" type="submit">
-                        {editMode ? 'Actualizar' : 'Agregar'}
-                    </Button>
-                </form>
-            </Paper>
+            <Grid container spacing={3}>
+                {/* Formulario a la izquierda */}
+                <Grid item xs={12} md={4}>
+                    <Paper elevation={3} style={{ padding: '30px' }}>
+                        <Typography variant="h5" color="primary" gutterBottom>
+                            {editMode ? 'Editar Alumno' : 'Agregar Alumno'}
+                        </Typography>
+                        <form onSubmit={editMode ? handleUpdate : handleSubmit}>
+                            <TextField
+                                name="cif"
+                                label="CIF"
+                                variant="outlined"
+                                fullWidth
+                                value={form.cif}
+                                onChange={handleChange}
+                                margin="normal"
+                                required
+                                disabled={editMode}
+                            />
+                            <TextField
+                                name="nombres"
+                                label="Nombres"
+                                variant="outlined"
+                                fullWidth
+                                value={form.nombres}
+                                onChange={handleChange}
+                                margin="normal"
+                                required
+                            />
+                            <TextField
+                                name="apellido"
+                                label="Apellido"
+                                variant="outlined"
+                                fullWidth
+                                value={form.apellido}
+                                onChange={handleChange}
+                                margin="normal"
+                                required
+                            />
+                            <TextField
+                                name="email"
+                                label="Email"
+                                variant="outlined"
+                                fullWidth
+                                value={form.email}
+                                onChange={handleChange}
+                                margin="normal"
+                            />
+                            <TextField
+                                name="facultad"
+                                label="Facultad"
+                                select
+                                fullWidth
+                                onChange={handleChange}
+                                margin="normal"
+                                value={form.facultad.id}
+                                sx={{ mb: 2 }}
+                                required
+                                InputLabelProps={{ shrink: true }}
+                            >
+                                {facultades.map((f) => (
+                                    <MenuItem key={f.codigo} value={f.nombre}>
+                                        {f.nombre}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                fullWidth
+                                sx={{ mt: 2 }}
+                            >
+                                {editMode ? 'Actualizar' : 'Agregar'}
+                            </Button>
+                        </form>
+                    </Paper>
+                </Grid>
 
-            <Grid container spacing={2} style={{ marginTop: '20px' }}>
-                {alumnos.map((alumno) => (
-                    <Grid item xs={12} sm={6} md={4} key={alumno.cif}>
-                        <Paper elevation={3} style={{ padding: '10px', margin: '10px' }}>
-                            <h3>{alumno.nombres} {alumno.apellido}</h3>
-                            <p><strong>CIF:</strong> {alumno.cif}</p>
-                            <p><strong>Email:</strong> {alumno.email}</p>
-                            <p><strong>Facultad:</strong> {alumno.facultad}</p>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => handleEdit(alumno)}
-                                style={{ marginRight: '10px' }}
-                            >
-                                Editar
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                onClick={() => handleDelete(alumno.cif)}
-                            >
-                                Eliminar
-                            </Button>
-                        </Paper>
-                    </Grid>
-                ))}
+                {/* Lista de alumnos a la derecha */}
+                <Grid item xs={12} md={8}>
+                    <Paper elevation={3} style={{ padding: '20px', height: '600px', overflowY: 'auto' }}>
+                        <Typography variant="h5" gutterBottom>
+                            Lista de Alumnos
+                        </Typography>
+                        <Grid container spacing={2}>
+                            {alumnos.map((alumno) => (
+                                <Grid item xs={12} key={alumno.cif}>
+                                    <Paper elevation={2} style={{ padding: '10px' }}>
+                                        <Typography variant="h6">{alumno.nombres} {alumno.apellido}</Typography>
+                                        <Typography variant="body2"><strong>CIF:</strong> {alumno.cif}</Typography>
+                                        <Typography variant="body2"><strong>Email:</strong> {alumno.email}</Typography>
+                                        <Typography variant="body2"><strong>Facultad:</strong> {alumno.facultad}</Typography>
+                                        <Button
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => handleEdit(alumno)}
+                                            sx={{ mt: 1, mr: 1 }}
+                                        >
+                                            Editar
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            color="error"
+                                            onClick={() => handleDelete(alumno.cif)}
+                                            sx={{ mt: 1 }}
+                                        >
+                                            Eliminar
+                                        </Button>
+                                    </Paper>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Paper>
+                </Grid>
             </Grid>
         </Container>
     );

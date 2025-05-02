@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Container, Grid, Paper } from '@mui/material';
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemText, Typography, Toolbar, AppBar, CssBaseline } from '@mui/material';
 import Alumno from './Alumno';
 import Profesor from './Profesor';
 import Coordinador from './Coordinador';
 import Facultad from './Facultad';
 
+const drawerWidth = 240;
+
 const AdminDashboard = () => {
-    const [selectedComponent, setSelectedComponent] = useState(null);
+    const [selectedComponent, setSelectedComponent] = useState('alumno');
 
     const renderComponent = () => {
         switch (selectedComponent) {
@@ -24,26 +26,56 @@ const AdminDashboard = () => {
     };
 
     return (
-        <Container>
-            <Paper elevation={3} style={{ padding: '20px', marginBottom: '20px' }}>
-                <Grid container spacing={2} justifyContent="center">
-                    <Grid item>
-                        <Button variant="contained" onClick={() => setSelectedComponent('alumno')}>Alumnos</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={() => setSelectedComponent('profesor')}>Profesores</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={() => setSelectedComponent('coordinador')}>Coordinadores</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" onClick={() => setSelectedComponent('facultad')}>Facultades</Button>
-                    </Grid>
-                </Grid>
-            </Paper>
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                <Toolbar>
+                    <Typography variant="h6" noWrap component="div">
+                        Panel de Administración
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-            {renderComponent()}
-        </Container>
+            <Drawer
+                variant="permanent"
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                }}
+            >
+                <Toolbar />
+                <Box sx={{ overflow: 'auto' }}>
+                    <List>
+                        {[
+                            { label: 'Alumnos', key: 'alumno' },
+                            { label: 'Profesores', key: 'profesor' },
+                            { label: 'Coordinadores', key: 'coordinador' },
+                            { label: 'Facultades', key: 'facultad' }
+                        ].map(({ label, key }) => (
+                            <ListItem key={key} disablePadding>
+                                <ListItemButton onClick={() => setSelectedComponent(key)}>
+                                    <ListItemText primary={label} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            </Drawer>
+
+            <Box
+                component="main"
+                sx={{
+                    flexGrow: 1,
+                    bgcolor: 'background.default',
+                    p: 3,
+                    ml: `${drawerWidth}px`,
+                }}
+            >
+                <Toolbar />
+                {renderComponent()}
+            </Box>
+        </Box>
     );
 };
 
