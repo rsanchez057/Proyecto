@@ -8,7 +8,8 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "profesor", uniqueConstraints = @UniqueConstraint(columnNames = "cif"))
 public class Profesor {

@@ -1,7 +1,11 @@
 package org.universidad.incidencias.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "coordinador", uniqueConstraints = @UniqueConstraint(columnNames = "cif"))
 public class Coordinador {

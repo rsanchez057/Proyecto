@@ -1,14 +1,19 @@
 package org.universidad.incidencias.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CoordinadorDTO {
 
     private String nombre;
     private String apellidos;
     private String cif;
     private String email;
+    private String nombreFacultad;
 
     public String getNombre() {
-
         return nombre;
     }
 
@@ -38,5 +43,13 @@ public class CoordinadorDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNombreFacultad() {
+        return nombreFacultad;
+    }
+
+    public void setNombreFacultad(String nombreFacultad) {
+        this.nombreFacultad = nombreFacultad;
     }
 }
