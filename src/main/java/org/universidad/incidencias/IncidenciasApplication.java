@@ -5,9 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication
+@SpringBootApplication  // escanea org.universidad.incidencias y subpaquetes
 public class IncidenciasApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(IncidenciasApplication.class, args);
     }

@@ -9,8 +9,8 @@ const Alumno = () => {
     const [facultades, setFacultades] = useState([]);
     const [form, setForm] = useState({
         cif: '',
-        nombres: '',
-        apellido: '',
+        nombre: '',
+        apellidos: '',
         email: '',
         facultad: '',
     });
@@ -38,7 +38,7 @@ const Alumno = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(form),
         }).then(() => {
-            setForm({ cif: '', nombres: '', apellido: '', email: '', facultad: '' });
+            setForm({ cif: '', nombre: '', apellidos: '', email: '', facultad: '' });
             fetch('http://localhost:8181/api/alumno/all')
                 .then(res => res.json())
                 .then(setAlumnos);
@@ -51,20 +51,38 @@ const Alumno = () => {
         setEditMode(true);
     };
 
-    const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        fetch(`http://localhost:8181/api/alumno/update/${currentCif}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
-        }).then(() => {
-            setForm({ cif: '', nombres: '', apellido: '', email: '', facultad: '' });
+    
+        try {
+            const response = await fetch(`http://localhost:8181/api/alumno/update/${currentCif}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            });
+    
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Error al actualizar el alumno: ${errorMessage}`);
+            }
+    
+            // Resetear el formulario y el estado
+            setForm({ cif: '', nombre: '', apellidos: '', email: '', facultad: '' });
             setEditMode(false);
             setCurrentCif(null);
-            fetch('http://localhost:8181/api/alumno/all')
-                .then(res => res.json())
-                .then(setAlumnos);
-        });
+    
+            // Recargar la lista de alumnos
+            const alumnosResponse = await fetch('http://localhost:8181/api/alumno/all');
+            if (!alumnosResponse.ok) {
+                throw new Error('Error al cargar la lista de alumnos después de la actualización');
+            }
+            const alumnos = await alumnosResponse.json();
+            setAlumnos(alumnos);
+    
+        } catch (error) {
+            console.error('Error en la actualización del alumno:', error);
+            alert(`Error: ${error.message}`);
+        }
     };
 
     const handleDelete = (cif) => {
@@ -105,7 +123,7 @@ const Alumno = () => {
                                 disabled={editMode}
                             />
                             <TextField
-                                name="nombres"
+                                name="nombre"
                                 label="Nombres"
                                 variant="outlined"
                                 fullWidth
@@ -115,7 +133,7 @@ const Alumno = () => {
                                 required
                             />
                             <TextField
-                                name="apellido"
+                                name="apellidos"
                                 label="Apellido"
                                 variant="outlined"
                                 fullWidth

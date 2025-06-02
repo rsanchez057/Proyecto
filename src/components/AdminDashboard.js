@@ -4,6 +4,7 @@ import Alumno from './Alumno';
 import Profesor from './Profesor';
 import Coordinador from './Coordinador';
 import Facultad from './Facultad';
+import Incidencias from './Incidencias'; // ✅ Importar el componente
 
 const drawerWidth = 240;
 
@@ -20,6 +21,8 @@ const AdminDashboard = () => {
                 return <Coordinador />;
             case 'facultad':
                 return <Facultad />;
+            case 'incidencias':
+                return <Incidencias />; // ✅ Agregado
             default:
                 return null;
         }
@@ -51,7 +54,8 @@ const AdminDashboard = () => {
                             { label: 'Alumnos', key: 'alumno' },
                             { label: 'Profesores', key: 'profesor' },
                             { label: 'Coordinadores', key: 'coordinador' },
-                            { label: 'Facultades', key: 'facultad' }
+                            { label: 'Facultades', key: 'facultad' },
+                            { label: 'Incidencias', key: 'incidencias' }, // ✅ Entrada nueva
                         ].map(({ label, key }) => (
                             <ListItem key={key} disablePadding>
                                 <ListItemButton onClick={() => setSelectedComponent(key)}>
