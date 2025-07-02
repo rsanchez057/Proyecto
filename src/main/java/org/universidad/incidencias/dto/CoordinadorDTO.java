@@ -1,17 +1,29 @@
 package org.universidad.incidencias.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class CoordinadorDTO {
-
+    private String cif;
+    private String password;
     private String nombre;
     private String apellidos;
-    private String cif;
     private String email;
     private String nombreFacultad;
+
+    // Getters y setters
+    public String getCif() {
+        return cif;
+    }
+
+    public void setCif(String cif) {
+        this.cif = cif;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getNombre() {
         return nombre;
@@ -27,14 +39,6 @@ public class CoordinadorDTO {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
-    }
-
-    public String getCif() {
-        return cif;
-    }
-
-    public void setCif(String cif) {
-        this.cif = cif;
     }
 
     public String getEmail() {

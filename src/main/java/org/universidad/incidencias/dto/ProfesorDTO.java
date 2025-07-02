@@ -6,6 +6,7 @@ public class ProfesorDTO {
     private String cif;
     private String email;
     private String nombreFacultad;
+    private String password;
 
     public String getNombre() {
         return nombre;
@@ -45,5 +46,13 @@ public class ProfesorDTO {
 
     public void setNombreFacultad(String nombreFacultad) {
         this.nombreFacultad = nombreFacultad;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

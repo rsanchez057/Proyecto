@@ -34,20 +34,21 @@ public class ProfesorServiceImpl implements ProfesorService {
 
     @Override
     public Profesor save(Profesor profesor) {
-        // comprobar cif
+        // Validar que el CIF no exista
         if (profesorRepository.findProfesorByCif(profesor.getCif()).isPresent()) {
-            throw new RuntimeException("El cif ya existe");
+            throw new IllegalArgumentException("El CIF ya existe: " + profesor.getCif());
         }
 
-        // comprobar facultad
+        // Validar la facultad
         if (profesor.getFacultad() != null && profesor.getFacultad().getNombre() != null) {
             var facultad = facultadRepository.findFacultadByNombre(profesor.getFacultad().getNombre());
             if (facultad == null) {
-                throw new IllegalArgumentException("Facultad con nombre '" + profesor.getFacultad().getNombre() + "' no existe");
+                throw new IllegalArgumentException("Facultad no encontrada: " + profesor.getFacultad().getNombre());
             }
             profesor.setFacultad(facultad);
         }
 
+        // Guardar el profesor
         return profesorRepository.save(profesor);
     }
 

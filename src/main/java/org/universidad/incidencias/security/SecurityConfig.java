@@ -24,11 +24,13 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    // Codificador de contraseñas
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // Provider para autenticación con base en UserDetailsService
     @Bean
     public DaoAuthenticationProvider authProvider() {
         var authProvider = new DaoAuthenticationProvider();
@@ -37,17 +39,22 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    // AuthenticationManager
     @Bean
     public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
+    // Filtro de seguridad y configuración de acceso
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/**").permitAll() // acceso libre a /auth
+                        .requestMatchers("/coordinador/**").hasAuthority("ROLE_COORDINADOR")
+                        .requestMatchers("/profesor/**").hasAuthority("ROLE_PROFESOR")
+                        .anyRequest().authenticated() // el resto requiere autenticación
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authProvider())

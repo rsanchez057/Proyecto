@@ -29,7 +29,8 @@ public class CoordinadorServiceImpl implements CoordinadorService {
 
     @Override
     public Coordinador getOne(String cif) {
-        return coordinadorRepository.findCoordinadorByCif(cif);
+        return coordinadorRepository.findCoordinadorByCif(cif)
+                .orElseThrow(() -> new RuntimeException("Coordinador no encontrado con cif: " + cif));
     }
 
     @Override
@@ -52,10 +53,9 @@ public class CoordinadorServiceImpl implements CoordinadorService {
 
     @Override
     public Coordinador update(Coordinador coordinador) {
-        Coordinador coordinadorDB = coordinadorRepository.findCoordinadorByCif(coordinador.getCif());
-        if (coordinadorDB == null) {
-            throw new RuntimeException("Coordinador no encontrado");
-        }
+        Coordinador coordinadorDB = coordinadorRepository.findCoordinadorByCif(coordinador.getCif())
+                .orElseThrow(() -> new RuntimeException("Coordinador no encontrado"));
+
         coordinadorDB.setNombre(coordinador.getNombre());
         coordinadorDB.setEmail(coordinador.getEmail());
 
